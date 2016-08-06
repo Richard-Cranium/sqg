@@ -100,3 +100,24 @@ The contents of the resulting tar archive look like
 	./usr/lib64/python2.7/site-packages/sqg/utilities/__init__.py
 	./usr/lib64/python2.7/site-packages/sqg/__init__.py
 	0 ✓ flacy@flacy ~/Documents/sqg $ 
+
+### Creating a slackware package of just this.
+
+Bare bones approach...
+
+	python setup.py bdist_dumb --bdist-dir /tmp/package
+	export SDIR=$(pwd)
+	# setup will remove /tmp/package when done.
+	mkdir /tmp/package
+	cd /tmp/package
+	# I run Slackware64; if you are running Slackware, x86_64 will be something else.
+	tar xf ${SDIR}/dist/sqg-1.0.linux-x86_64.tar.gz
+	# become root
+	su -
+	cd /tmp/package
+	makepkg /tmp/sqg-1.0-noarch-1.tgz
+	# I let makepkg change the ownership of the files for me.
+	cd /tmp
+	installpkg sqg-1.0-noarch-1.tgz
+	
+Note that the resulting package will not have any description in it.
